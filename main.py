@@ -60,6 +60,7 @@ def pop(captcha_token, pop_count='800', timeout = 25):
     # print(captcha_token)
     url = 'https://stats.popcat.click/pop?pop_count='+pop_count+'&captcha_token='+captcha_token#+'&token='+token
 
+    code = None
     try:
 
 
@@ -72,8 +73,8 @@ def pop(captcha_token, pop_count='800', timeout = 25):
         if  "!DOCTYPE html" in res:
             #print('Error============================================')
 
-            print('Error Code:', code)
-            return -1
+            #print('Error Code:', code)
+            return code
         else:
         
             res = json.loads(res)
@@ -120,24 +121,25 @@ while True:
         maximum_tries = 40
         for i in range(maximum_tries):
             status = pop(captcha_token = captcha_token)
-            if status != -1:
+            if status:
 
                 print(ip, status)
-                status = '201'
+                
+                if status == 201:
 
-                Path("./logs").mkdir(parents=True, exist_ok=True)
-                with open('./logs/output.csv', 'a', newline='') as csvfile:
-                  # 建立 CSV 檔寫入器
-                  writer = csv.writer(csvfile)
+                    Path("./logs").mkdir(parents=True, exist_ok=True)
+                    with open('./logs/output.csv', 'a', newline='') as csvfile:
+                    # 建立 CSV 檔寫入器
+                        writer = csv.writer(csvfile)
 
-                  current_time = datetime.datetime.now()
-                  datetime_format = current_time.strftime("%Y/%m/%d %H:%M:%S")
+                        current_time = datetime.datetime.now()
+                        datetime_format = current_time.strftime("%Y/%m/%d %H:%M:%S")
 
-                  # 寫入一列資料
-                  writer.writerow([datetime_format, ip, status])
+                    # 寫入一列資料
+                        writer.writerow([datetime_format, ip, status])
 
 
-                break
+                    break
 
             time.sleep(0.5)
             scraper = cloudscraper.create_scraper()
