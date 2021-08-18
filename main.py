@@ -66,12 +66,14 @@ def pop(captcha_token, pop_count='800', timeout = 25):
         res = scraper.get(url)
 
         code = res.status_code
+
+        res = res.text
         # print(code)
         if  "!DOCTYPE html" in res:
             #print('Error============================================')
             return -1
         else:
-            res = res.text
+        
             res = json.loads(res)
             print(res['Location']['Name'], end='\t')
             if  "Location" in res:
