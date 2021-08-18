@@ -71,6 +71,8 @@ def pop(captcha_token, pop_count='800', timeout = 25):
         # print(code)
         if  "!DOCTYPE html" in res:
             #print('Error============================================')
+
+            print('Error Code:', code)
             return -1
         else:
         
